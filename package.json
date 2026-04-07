@@ -1,0 +1,17 @@
+{
+  "name": "lunar-lander",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "phaser": "^3.88.2",
+    "tone": "^15.1.3"
+  },
+  "devDependencies": {
+    "vite": "^6.3.1"
+  }
+}
