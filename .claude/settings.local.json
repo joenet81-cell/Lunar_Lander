@@ -5,7 +5,21 @@
       "Bash(npx vite:*)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
       "WebFetch(domain:www.youtube.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(start \"\" http://localhost:5173)",
+      "Skill(nano-banana-2)",
+      "Skill(nano-banana-2:*)",
+      "Bash(curl -fsSL https://raw.githubusercontent.com/inference-sh/skills/refs/heads/main/cli-install.md)",
+      "Bash(curl -fsSL https://cli.inference.sh)",
+      "Bash(sh)",
+      "Bash(curl -fsSL https://dist.inference.sh/infsh/latest/infsh_windows_amd64.exe -o __TRACKED_VAR__/.local/bin/infsh.exe)",
+      "Bash(mkdir -p __TRACKED_VAR__/.local/bin)",
+      "Bash(curl -fsSL \"https://dist.inference.sh/infsh/latest/\")",
+      "Bash(curl -fsSL \"https://github.com/inference-sh/cli/releases/latest\" -L)",
+      "Bash(curl -fsSL https://cli.inference.sh -o /tmp/install.sh)",
+      "Bash(bash /tmp/install.sh)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(curl -fsSL https://dist.inference.sh/cli/manifest.json)"
     ]
   }
 }

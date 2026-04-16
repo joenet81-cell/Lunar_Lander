@@ -17,14 +17,21 @@ export class Ship {
     this.landingSpeed = 0
     this.landingAngle = 0
 
-    // Sprite — scale 0.75 (sprite is 40×52 px, displayed at 30×39 px)
+    // Sprite — scale 0.37 (100×120 px → ~37×44 px displayed)
     this.sprite = scene.physics.add.image(x, y, 'ship')
-    this.sprite.setScale(0.75)
+    this.sprite.setScale(0.37)
     this.sprite.setDepth(10)
     this.sprite.body.allowGravity = false
+    this.sprite.body.setCollideWorldBounds(true)
 
-    // Footpads at y=46 of 52px sprite → 20px below center → 20 * 0.75 = 15 world px
-    this.hitRadius = 15
+    // Footpads at y=112 of 120px → 52px below center → 52 * 0.37 ≈ 19 world px
+    this.hitRadius = 19
+
+    // Starts parked on launch base — physics begin on first thrust
+    this.parked = true
+
+    // Wind: constant horizontal force (px/s²), positive = rightward
+    this.wind = levelData.wind || 0
 
     this.controls = scene.input.keyboard.createCursorKeys()
 
@@ -46,6 +53,16 @@ export class Ship {
     const dt = this.scene.game.loop.delta / 1000
     const ctrl = this.controls
 
+    // While parked on launch base, wait for first thrust input
+    if (this.parked) {
+      if (ctrl.up.isDown && this.fuel > 0) {
+        this.parked = false
+      } else {
+        this._drawFlame(dt)
+        return
+      }
+    }
+
     // Rotation
     if (ctrl.left.isDown) {
       this.sprite.angle -= ROTATION_SPEED * dt
@@ -66,15 +83,15 @@ export class Ship {
     // Gravity (manual)
     this.sprite.body.velocity.y += this.gravity * dt
 
+    // Wind (constant horizontal push)
+    if (this.wind !== 0) {
+      this.sprite.body.velocity.x += this.wind * dt
+    }
+
     // Clamp velocity for arcade feel
     const maxV = 400
     this.sprite.body.velocity.x = Phaser.Math.Clamp(this.sprite.body.velocity.x, -maxV, maxV)
     this.sprite.body.velocity.y = Phaser.Math.Clamp(this.sprite.body.velocity.y, -maxV, maxV)
-
-    // Screen wrap horizontally
-    const w = this.scene.scale.width
-    if (this.sprite.x < -20) this.sprite.x = w + 20
-    if (this.sprite.x > w + 20) this.sprite.x = -20
 
     // Out of top — bounce back
     if (this.sprite.y < 0) {
@@ -98,52 +115,59 @@ export class Ship {
     const rad     = Phaser.Math.DegToRad(this.sprite.angle - 90)
     const perpRad = rad + Math.PI / 2
 
-    // Engine bell positions (world px, scale 0.75):
-    //   16 sprite px below center → 16 * 0.75 = 12 world px
-    //   ±7 sprite px from centerline → 7 * 0.75 ≈ 5 world px
-    const BELL_DOWN = 12
-    const BELL_SIDE = 5
+    // 3-engine cluster nozzle exit:
+    // sprite center → nozzle tips at y=106 of 120px → 46px below center
+    // 46 * 0.37 = 17 world px below sprite center
+    const NOZZLE_DOWN = 17
+    const ox = this.sprite.x - Math.cos(rad) * NOZZLE_DOWN
+    const oy = this.sprite.y - Math.sin(rad) * NOZZLE_DOWN
 
-    // Midpoint on ship's down axis at engine depth
-    const midX = this.sprite.x - Math.cos(rad) * BELL_DOWN
-    const midY = this.sprite.y - Math.sin(rad) * BELL_DOWN
+    // Flame length varies with flicker
+    const flameLen = Phaser.Math.Between(18, 34)
+    const tipX = ox - Math.cos(rad) * flameLen
+    const tipY = oy - Math.sin(rad) * flameLen
 
-    // Left and right engine origins
-    const engines = [
-      { ox: midX - Math.cos(perpRad) * BELL_SIDE, oy: midY - Math.sin(perpRad) * BELL_SIDE },
-      { ox: midX + Math.cos(perpRad) * BELL_SIDE, oy: midY + Math.sin(perpRad) * BELL_SIDE }
-    ]
-
-    // Flame layers (white core → yellow → orange → red, smaller than single-engine)
+    // Flame layers: wide at base, narrow at tip
+    // outer glow → mid → core → white hot center
     const layers = [
-      { color: 0xffffff, w: 2,  alpha: 1.0  },
-      { color: 0xffff44, w: 3.5, alpha: 0.9  },
-      { color: 0xff8800, w: 5,  alpha: 0.75 },
-      { color: 0xff3300, w: 6.5, alpha: 0.5  },
+      { color: 0xff2200, w: 9,   alpha: 0.35 },
+      { color: 0xff6600, w: 7,   alpha: 0.55 },
+      { color: 0xff9900, w: 5,   alpha: 0.75 },
+      { color: 0xffdd00, w: 3.5, alpha: 0.90 },
+      { color: 0xffffff, w: 1.5, alpha: 1.0  },
     ]
 
-    for (const { ox, oy } of engines) {
-      const flameLen = Phaser.Math.Between(10, 20)
-      const tipX = ox - Math.cos(rad) * flameLen
-      const tipY = oy - Math.sin(rad) * flameLen
-
-      for (const { color, w, alpha } of layers) {
-        const spread = (Math.random() - 0.5) * w * 0.4
-        this.flameGfx.fillStyle(color, alpha)
-        this.flameGfx.fillTriangle(
-          ox + Math.cos(perpRad) * w,
-          oy + Math.sin(perpRad) * w,
-          ox - Math.cos(perpRad) * w,
-          oy - Math.sin(perpRad) * w,
-          tipX + Math.cos(perpRad) * spread,
-          tipY + Math.sin(perpRad) * spread
-        )
-      }
-
-      // Bright spark at nozzle exit
-      this.flameGfx.fillStyle(0xffffff, 0.9)
-      this.flameGfx.fillCircle(ox, oy, 2)
+    for (const { color, w, alpha } of layers) {
+      const jitter = (Math.random() - 0.5) * w * 0.5
+      this.flameGfx.fillStyle(color, alpha)
+      this.flameGfx.fillTriangle(
+        ox + Math.cos(perpRad) * w,
+        oy + Math.sin(perpRad) * w,
+        ox - Math.cos(perpRad) * w,
+        oy - Math.sin(perpRad) * w,
+        tipX + Math.cos(perpRad) * jitter,
+        tipY + Math.sin(perpRad) * jitter
+      )
     }
+
+    // Glowing halo at nozzle exit
+    this.flameGfx.fillStyle(0xffffff, 0.6)
+    this.flameGfx.fillCircle(ox, oy, 4)
+    this.flameGfx.fillStyle(0xffdd00, 0.4)
+    this.flameGfx.fillCircle(ox, oy, 7)
+
+    // Secondary exhaust shimmer — inner wisp
+    const wispLen = Phaser.Math.Between(8, 16)
+    const wispTipX = ox - Math.cos(rad) * wispLen
+    const wispTipY = oy - Math.sin(rad) * wispLen
+    this.flameGfx.fillStyle(0xffffff, 0.25)
+    this.flameGfx.fillTriangle(
+      ox + Math.cos(perpRad) * 2,
+      oy + Math.sin(perpRad) * 2,
+      ox - Math.cos(perpRad) * 2,
+      oy - Math.sin(perpRad) * 2,
+      wispTipX, wispTipY
+    )
   }
 
   kill() {

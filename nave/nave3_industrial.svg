@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 145" width="130" height="145">
+  <!-- Industrial Mining Ship -->
+
+  <!-- Cargo pods (sides) -->
+  <!-- Left cargo -->
+  <rect x="4" y="55" width="28" height="40" rx="3" fill="#4a3520" stroke="#cc6600" stroke-width="2"/>
+  <rect x="7" y="58" width="22" height="8" rx="1" fill="#3a2810" stroke="#aa5500" stroke-width="1"/>
+  <rect x="7" y="70" width="22" height="8" rx="1" fill="#3a2810" stroke="#aa5500" stroke-width="1"/>
+  <rect x="7" y="82" width="22" height="8" rx="1" fill="#3a2810" stroke="#aa5500" stroke-width="1"/>
+  <!-- Left arm connector -->
+  <rect x="32" y="68" width="12" height="6" rx="1" fill="#5a4530" stroke="#cc6600" stroke-width="1.5"/>
+
+  <!-- Right cargo -->
+  <rect x="98" y="55" width="28" height="40" rx="3" fill="#4a3520" stroke="#cc6600" stroke-width="2"/>
+  <rect x="101" y="58" width="22" height="8" rx="1" fill="#3a2810" stroke="#aa5500" stroke-width="1"/>
+  <rect x="101" y="70" width="22" height="8" rx="1" fill="#3a2810" stroke="#aa5500" stroke-width="1"/>
+  <rect x="101" y="82" width="22" height="8" rx="1" fill="#3a2810" stroke="#aa5500" stroke-width="1"/>
+  <!-- Right arm connector -->
+  <rect x="86" y="68" width="12" height="6" rx="1" fill="#5a4530" stroke="#cc6600" stroke-width="1.5"/>
+
+  <!-- Heavy landing legs -->
+  <!-- Left outer -->
+  <line x1="36" y1="112" x2="8"  y2="136" stroke="#886644" stroke-width="5" stroke-linecap="round"/>
+  <rect x="2"  y="132" width="18" height="6" rx="2" fill="#664422" stroke="#cc6600" stroke-width="1.5"/>
+  <!-- Left inner -->
+  <line x1="48" y1="115" x2="30" y2="133" stroke="#aa8855" stroke-width="4" stroke-linecap="round"/>
+  <!-- Right outer -->
+  <line x1="94" y1="112" x2="122" y2="136" stroke="#886644" stroke-width="5" stroke-linecap="round"/>
+  <rect x="110" y="132" width="18" height="6" rx="2" fill="#664422" stroke="#cc6600" stroke-width="1.5"/>
+  <!-- Right inner -->
+  <line x1="82" y1="115" x2="100" y2="133" stroke="#aa8855" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Engine cluster — 3 wide nozzles -->
+  <polygon points="38,114 52,114 50,132 40,132" fill="#2a2a2a" stroke="#ff6600" stroke-width="1.5"/>
+  <polygon points="55,114 75,114 73,134 57,134" fill="#222" stroke="#ff6600" stroke-width="2"/>
+  <polygon points="78,114 92,114 90,132 80,132" fill="#2a2a2a" stroke="#ff6600" stroke-width="1.5"/>
+  <!-- Engine glow -->
+  <ellipse cx="45" cy="114" rx="8"  ry="3" fill="#ff6600" opacity="0.6"/>
+  <ellipse cx="65" cy="114" rx="10" ry="3.5" fill="#ff8800" opacity="0.7"/>
+  <ellipse cx="85" cy="114" rx="8"  ry="3" fill="#ff6600" opacity="0.6"/>
+
+  <!-- Main hull — wide & boxy -->
+  <rect x="30" y="45" width="70" height="72" rx="5" fill="#3a3a3a" stroke="#666" stroke-width="2.5"/>
+
+  <!-- Hull armor plates -->
+  <rect x="30" y="45" width="34" height="36" rx="3" fill="#3d3d3d" stroke="#555" stroke-width="1"/>
+  <rect x="66" y="45" width="34" height="36" rx="3" fill="#3d3d3d" stroke="#555" stroke-width="1"/>
+  <rect x="30" y="83" width="34" height="34" rx="3" fill="#383838" stroke="#555" stroke-width="1"/>
+  <rect x="66" y="83" width="34" height="34" rx="3" fill="#383838" stroke="#555" stroke-width="1"/>
+
+  <!-- Rivets -->
+  <circle cx="35" cy="50"  r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="95" cy="50"  r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="35" cy="113" r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="95" cy="113" r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="35" cy="81"  r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="95" cy="81"  r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="65" cy="50"  r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="65" cy="81"  r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+  <circle cx="65" cy="113" r="2" fill="#555" stroke="#777" stroke-width="0.5"/>
+
+  <!-- Cockpit window (armored) -->
+  <rect x="46" y="50" width="38" height="26" rx="4" fill="#111" stroke="#888" stroke-width="2"/>
+  <rect x="48" y="52" width="34" height="22" rx="3" fill="#0a1a2a" stroke="#446688" stroke-width="1.5"/>
+  <!-- Window panes -->
+  <rect x="50" y="54" width="14" height="18" rx="2" fill="#0d2035" stroke="#335577" stroke-width="1"/>
+  <rect x="66" y="54" width="14" height="18" rx="2" fill="#0d2035" stroke="#335577" stroke-width="1"/>
+  <!-- Reflections -->
+  <line x1="52" y1="56" x2="56" y2="60" stroke="white" stroke-width="1" opacity="0.3"/>
+  <line x1="68" y1="56" x2="72" y2="60" stroke="white" stroke-width="1" opacity="0.3"/>
+
+  <!-- Warning stripes on hull -->
+  <rect x="30" y="86" width="70" height="6" fill="none" stroke="none"/>
+  <!-- Diagonal stripes pattern -->
+  <clipPath id="hullClip"><rect x="30" y="86" width="70" height="6"/></clipPath>
+  <g clip-path="url(#hullClip)">
+    <line x1="28" y1="86" x2="36" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="36" y1="86" x2="44" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="44" y1="86" x2="52" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="52" y1="86" x2="60" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="60" y1="86" x2="68" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="68" y1="86" x2="76" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="76" y1="86" x2="84" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="84" y1="86" x2="92" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="92" y1="86" x2="100" y2="92" stroke="#ffaa00" stroke-width="3"/>
+    <line x1="100" y1="86" x2="108" y2="92" stroke="#ffaa00" stroke-width="3"/>
+  </g>
+  <rect x="30" y="86" width="70" height="6" fill="none" stroke="#cc8800" stroke-width="0.5"/>
+
+  <!-- Side thrusters -->
+  <rect x="27" y="95" width="6" height="10" rx="2" fill="#222" stroke="#666" stroke-width="1.5"/>
+  <ellipse cx="30" cy="105" rx="3.5" ry="1.5" fill="#ff6600" opacity="0.5"/>
+  <rect x="97" y="95" width="6" height="10" rx="2" fill="#222" stroke="#666" stroke-width="1.5"/>
+  <ellipse cx="100" cy="105" rx="3.5" ry="1.5" fill="#ff6600" opacity="0.5"/>
+
+  <!-- Top dome / bridge -->
+  <ellipse cx="65" cy="45" rx="22" ry="8" fill="#444" stroke="#666" stroke-width="2"/>
+  <ellipse cx="65" cy="45" rx="14" ry="5" fill="#2a2a2a" stroke="#555" stroke-width="1"/>
+
+  <!-- Radar dish -->
+  <line x1="65" y1="37" x2="65" y2="25" stroke="#888" stroke-width="2"/>
+  <ellipse cx="65" cy="24" rx="10" ry="4" fill="none" stroke="#aaa" stroke-width="1.5"/>
+  <line x1="55" y1="24" x2="75" y2="24" stroke="#aaa" stroke-width="1"/>
+
+  <!-- Company logo -->
+  <rect x="42" y="98" width="46" height="12" rx="2" fill="#222" stroke="#555" stroke-width="1"/>
+  <text x="65" y="108" font-family="monospace" font-size="7" fill="#ff8800" text-anchor="middle" font-weight="bold">MINING CO.</text>
+</svg>

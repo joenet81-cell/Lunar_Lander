@@ -7,5 +7,6 @@ export class BootScene extends Phaser.Scene {
   create() {
     generateAssets(this)
     this.scene.start('MenuScene')
+    this.scene.launch('DevScene')   // persistent overlay, always listening
   }
 }

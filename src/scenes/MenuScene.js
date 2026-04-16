@@ -50,16 +50,9 @@ export class MenuScene extends Phaser.Scene {
     this.flameActive  = false
     this.flameDuration = 0
 
-    // ── TITLE ─────────────────────────────────────────────────
-    this.add.text(width / 2, height * 0.22, 'LUNAR', {
-      fontFamily: 'monospace', fontSize: '64px',
-      color: '#ffffff', stroke: '#00ffff', strokeThickness: 4
-    }).setOrigin(0.5).setDepth(5)
-
-    this.add.text(width / 2, height * 0.36, 'LANDER', {
-      fontFamily: 'monospace', fontSize: '64px',
-      color: '#ffff00', stroke: '#ff8800', strokeThickness: 4
-    }).setOrigin(0.5).setDepth(5)
+    // ── TITLE — animated per-letter ───────────────────────────
+    this.titleLetters = []
+    this._buildTitle(width, height)
 
     // ── MODULE DISPLAY ─────────────────────────────────────────
     this.moduleImg = this.add.image(width / 2, height * 0.56, 'ship')
@@ -100,6 +93,25 @@ export class MenuScene extends Phaser.Scene {
 
   update(time, delta) {
     const { width, height } = this.scale
+
+    // ── Animated title letters ────────────────────────────────
+    const t = time * 0.001
+    for (const letter of this.titleLetters) {
+      // Rainbow color — each letter offset in hue
+      const hue = ((t * 0.18 + letter._phase * 0.16) % 1 + 1) % 1
+      letter.setColor(this._hslToHex(hue, 1, 0.62))
+
+      // Contrasting stroke color (complementary hue)
+      const strokeHue = (hue + 0.5) % 1
+      letter.setStroke(this._hslToHex(strokeHue, 1, 0.35), 5)
+
+      // Vertical sine wave
+      letter.y = letter._baseY + Math.sin(t * 2.2 + letter._phase) * 7
+
+      // Subtle scale pulse
+      const s = 1 + Math.sin(t * 3.1 + letter._phase + 1) * 0.06
+      letter.setScale(s)
+    }
 
     // ── Stars ─────────────────────────────────────────────────
     for (const star of this.stars) {
@@ -163,6 +175,58 @@ export class MenuScene extends Phaser.Scene {
         this.flameGfx.clear()
       }
     }
+  }
+
+  // ── Animated title ──────────────────────────────────────────
+
+  _buildTitle(width, height) {
+    // Each word is split into individual letter sprites so we can
+    // animate color, scale and position independently.
+    const words = [
+      { text: 'LUNAR',  baseY: height * 0.22 },
+      { text: 'LANDER', baseY: height * 0.36 },
+    ]
+
+    // Measure one character width using a temporary hidden text
+    const probe = this.add.text(0, -999, 'W', {
+      fontFamily: 'monospace', fontSize: '64px'
+    })
+    const charW = probe.width
+    probe.destroy()
+
+    let letterIndex = 0
+    for (const { text, baseY } of words) {
+      const totalW = text.length * charW
+      const startX = width / 2 - totalW / 2 + charW / 2
+
+      for (let i = 0; i < text.length; i++) {
+        const letter = this.add.text(startX + i * charW, baseY, text[i], {
+          fontFamily: 'monospace',
+          fontSize: '64px',
+          color: '#ffffff',
+          stroke: '#000000',
+          strokeThickness: 5,
+        }).setOrigin(0.5).setDepth(5)
+
+        letter._baseY     = baseY
+        letter._baseX     = startX + i * charW
+        // Each letter gets a unique phase offset for wave & color
+        letter._phase     = letterIndex * (Math.PI * 2 / 11)
+        this.titleLetters.push(letter)
+        letterIndex++
+      }
+    }
+  }
+
+  _hslToHex(h, s, l) {
+    // h: 0-1, s: 0-1, l: 0-1  →  '#rrggbb'
+    const a = s * Math.min(l, 1 - l)
+    const f = n => {
+      const k = (n + h * 12) % 12
+      const v = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
+      return Math.round(255 * v).toString(16).padStart(2, '0')
+    }
+    return `#${f(0)}${f(8)}${f(4)}`
   }
 
   // ── Asteroid helpers ────────────────────────────────────────

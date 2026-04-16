@@ -48,6 +48,10 @@ export class HUDScene extends Phaser.Scene {
       fontFamily: 'monospace', fontSize: '14px', color: '#ff4444'
     }).setOrigin(0.5)
 
+    // Wind indicator (hidden when wind = 0)
+    this.windLabel = this.add.text(580, 8, 'WIND', { ...style, color: '#888888', fontSize: '10px' })
+    this.windText  = this.add.text(580, 22, '', style)
+
     // Safe landing indicators
     this.add.text(width - 16, 22, 'SAFE: SPD<1.5 | ANG<20°', {
       fontFamily: 'monospace', fontSize: '9px', color: '#446644'
@@ -63,7 +67,7 @@ export class HUDScene extends Phaser.Scene {
     const vy = ship.body.velocity.y / 100
     const speed = Math.sqrt(vx * vx + vy * vy)
     const angle = Phaser.Math.Angle.WrapDegrees(ship.angle)
-    const alt = Math.max(0, 600 - ship.y)
+    const alt = Math.max(0, this.scale.height - ship.y)
     const fuelPct = ship.fuel / ship.maxFuel
 
     // Fuel bar
@@ -84,11 +88,24 @@ export class HUDScene extends Phaser.Scene {
     this.angleText.setText(`${angle.toFixed(1)}°`).setColor(angSafe ? colorOk : colorWarn)
     this.speedText.setText(speed.toFixed(2)).setColor(spdSafe ? colorOk : colorWarn)
 
+    // Wind indicator
+    const wind = ship.wind || 0
+    if (wind !== 0) {
+      const dir = wind > 0 ? '→' : '←'
+      this.windText.setText(`${dir} ${Math.abs(wind)}`).setColor(Math.abs(wind) > 30 ? '#ff4444' : '#ffaa00')
+      this.windLabel.setVisible(true)
+      this.windText.setVisible(true)
+    } else {
+      this.windLabel.setVisible(false)
+      this.windText.setVisible(false)
+    }
+
     // Warning
     const warnings = []
     if (!spdSafe && alt < 100) warnings.push('! HIGH SPEED !')
     if (!angSafe && alt < 100) warnings.push('! CHECK ANGLE !')
     if (ship.fuel < 50) warnings.push('! LOW FUEL !')
+    if (wind !== 0 && Math.abs(wind) > 25) warnings.push('! STRONG WIND !')
     this.warnText.setText(warnings.join('  '))
   }
 }
