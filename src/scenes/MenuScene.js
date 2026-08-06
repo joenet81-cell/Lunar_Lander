@@ -15,7 +15,17 @@ export class MenuScene extends Phaser.Scene {
     const { width, height } = this.scale
 
     // ── LAYERS (depth order) ──────────────────────────────────
-    // 0-1: stars    2-3: asteroids    4: comets    5+: UI
+    // -1: nebula  0-1: stars    2-3: asteroids    4: comets    5+: UI
+
+    // ── BACKGROUND ─────────────────────────────────────────────
+    this.bgNebula = this.add.image(width / 2, height / 2, 'bg_nebula')
+      .setScrollFactor(0)
+      .setDepth(-1)
+    
+    const scaleX = width / this.bgNebula.width
+    const scaleY = height / this.bgNebula.height
+    const scale = Math.max(scaleX, scaleY)
+    this.bgNebula.setScale(scale)
 
     // ── STARS with parallax movement ──────────────────────────
     this.stars = []

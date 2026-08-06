@@ -28,8 +28,19 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.world.setBounds(0, 0, worldWidth, worldHeight)
 
+    // Background Image
+    this.bgNebula = this.add.image(width / 2, height / 2, 'bg_nebula')
+      .setScrollFactor(0)
+      .setDepth(-10)
+    
+    const scaleX = width / this.bgNebula.width
+    const scaleY = height / this.bgNebula.height
+    const scale = Math.max(scaleX, scaleY)
+    this.bgNebula.setScale(scale)
+
     // Starfield across full world
     this.starGfx = this.add.graphics()
+    this.starGfx.setDepth(-9)
     this._drawStars(worldWidth, worldHeight)
 
     // Terrain spanning full world
