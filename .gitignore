@@ -1,0 +1,16 @@
+# Dependencias: las reinstala "npm install" a partir de package-lock.json.
+# No van al repositorio: son miles de archivos y ensucian cada commit.
+node_modules/
+
+# Compilado: lo regenera "npm run build".
+dist/
+
+# Configuracion de una maquina puntual, no del proyecto.
+.claude/settings.local.json
+.vscode/
+
+# Temporales del sistema y logs.
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.log
